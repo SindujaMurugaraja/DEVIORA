@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <title>DEVIORA | Engine Failure Intelligence</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+</head>
+<body>
+<header class="topbar">
+    <div class="brand">
+        <div class="brand-mark">
+            D
+        </div>
+        <div>
+            <h1>DEVIORA</h1>
+            <span>ENGINE FAILURE INTELLIGENCE</span>
+        </div>
+    </div>
+    <div class="system-status">
+        <span class="status-dot"></span>
+        ML SYSTEM ONLINE
+    </div>
+</header>
+<main class="container">
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-copy">
+            <div class="eyebrow">
+                EXPLAINABLE MACHINE LEARNING
+            </div>
+            <h2>
+                Predict.
+                <span>Explain.</span>
+                Prevent.
+            </h2>
+            <p>
+                DEVIORA analyses engine operating conditions,
+                detects failure patterns and generates an
+                investigation profile for every failed engine.
+            </p>
+        </div>
+        <div class="hero-orb">
+            <div class="orb-ring ring-one"></div>
+            <div class="orb-ring ring-two"></div>
+            <div class="orb-core">
+                ML
+            </div>
+        </div>
+    </section>
+    <!-- METRICS -->
+    <section class="metrics-grid">
+        <div class="metric-card">
+            <div class="metric-icon">◉</div>
+            <div>
+                <span class="metric-label">
+                    ENGINES ANALYZED
+                </span>
+                <strong id="totalEngines">
+                    0
+                </strong>
+            </div>
+        </div>
+        <div class="metric-card pass-card">
+            <div class="metric-icon">✓</div>
+            <div>
+                <span class="metric-label">
+                    PREDICTED PASS
+                </span>
+                <strong id="passCount">
+                    0
+                </strong>
+            </div>
+        </div>
+        <div class="metric-card fail-card">
+            <div class="metric-icon">!</div>
+            <div>
+                <span class="metric-label">
+                    PREDICTED FAIL
+                </span>
+                <strong id="failCount">
+                    0
+                </strong>
+            </div>
+        </div>
+        <div class="metric-card risk-card">
+            <div class="metric-icon">⚠</div>
+            <div>
+                <span class="metric-label">
+                    CRITICAL ENGINES
+                </span>
+                <strong id="criticalCount">
+                    0
+                </strong>
+            </div>
+        </div>
+    </section>
+    <!-- UPLOAD -->
+    <section class="upload-section">
+        <div class="section-heading">
+            <div>
+                <span class="section-kicker">
+                    STEP 01
+                </span>
+                <h3>
+                    Upload engine data
+                </h3>
+                <p>
+                    Import a CSV file containing engine operating parameters.
+                </p>
+            </div>
+        </div>
+        <div
+            class="drop-zone"
+            id="dropZone"
+        >
+            <div class="upload-icon">
+                ↑
+            </div>
+            <h4>
+                Drop your CSV here
+            </h4>
+            <p>
+                or select an engine dataset from your computer
+            </p>
+            <input
+                type="file"
+                id="fileInput"
+                accept=".csv"
+                hidden
+            >
+            <button
+                class="secondary-button"
+                id="chooseFile"
+            >
+                Choose CSV
+            </button>
+            <div
+                class="file-name"
+                id="fileName"
+            >
+                No file selected
+            </div>
+        </div>
+        <button
+            class="analyze-button"
+            id="analyzeButton"
+        >
+            <span>Run DEVIORA Analysis</span>
+            <b>→</b>
+        </button>
+    </section>
+    <!-- LOADING -->
+    <section
+        class="loading-card hidden"
+        id="loadingCard"
+    >
+        <div class="loader"></div>
+        <div>
+            <strong>
+                DEVIORA is investigating the dataset...
+            </strong>
+            <p>
+                Running Random Forest prediction and anomaly analysis.
+            </p>
+        </div>
+    </section>
+    <!-- RESULTS -->
+    <section
+        class="results-section hidden"
+        id="resultsSection"
+    >
+        <div class="section-title-row">
+            <div>
+                <span class="section-kicker">
+                    STEP 02
+                </span>
+                <h3>
+                    Engine Intelligence Overview
+                </h3>
+                <p>
+                    A visual summary of the current analysis.
+                </p>
+            </div>
+            <div class="model-pill">
+                RANDOM FOREST · 300 TREES
+            </div>
+        </div>
+        <!-- MAIN CHART ROW -->
+        <div class="chart-grid">
+            <div class="chart-card large-chart">
+                <div class="chart-header">
+                    <div>
+                        <span class="chart-kicker">
+                            FAILURE SIGNATURES
+                        </span>
+                        <h4>
+                            Detected failure patterns
+                        </h4>
+                    </div>
+                    <span class="chart-note">
+                        Predicted FAIL records
+                    </span>
+                </div>
+                <div
+                    class="signature-chart"
+                    id="signatureChart"
+                ></div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <span class="chart-kicker">
+                            HEALTH DISTRIBUTION
+                        </span>
+                        <h4>
+                            Engine status
+                        </h4>
+                    </div>
+                </div>
+                <div class="donut-area">
+                    <div
+                        class="donut"
+                        id="statusDonut"
+                    >
+                        <div class="donut-center">
+                            <strong id="donutTotal">
+                                0
+                            </strong>
+                            <span>
+                                Engines
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="legend">
+                    <div>
+                        <span class="legend-dot pass"></span>
+                        PASS
+                        <b id="passLegend">0</b>
+                    </div>
+                    <div>
+                        <span class="legend-dot fail"></span>
+                        FAIL
+                        <b id="failLegend">0</b>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- RISK DISTRIBUTION -->
+        <div class="risk-overview">
+            <div class="risk-heading">
+                <div>
+                    <span class="chart-kicker">
+                        INVESTIGATION PRIORITY
+                    </span>
+                    <h4>
+                        Risk distribution
+                    </h4>
+                </div>
+                <span class="chart-note">
+                    Higher score = stronger anomaly profile
+                </span>
+            </div>
+            <div class="risk-bars">
+                <div class="risk-row">
+                    <div class="risk-label">
+                        <span class="risk-dot critical"></span>
+                        Critical
+                    </div>
+                    <div class="risk-track">
+                        <div
+                            id="criticalBar"
+                            class="risk-fill critical-fill"
+                        ></div>
+                    </div>
+                    <strong id="criticalRisk">
+                        0
+                    </strong>
+                </div>
+                <div class="risk-row">
+                    <div class="risk-label">
+                        <span class="risk-dot high"></span>
+                        High
+                    </div>
+                    <div class="risk-track">
+                        <div
+                            id="highBar"
+                            class="risk-fill high-fill"
+                        ></div>
+                    </div>
+                    <strong id="highRisk">
+                        0
+                    </strong>
+                </div>
+                <div class="risk-row">
+                    <div class="risk-label">
+                        <span class="risk-dot medium"></span>
+                        Medium
+                    </div>
+                    <div class="risk-track">
+                        <div
+                            id="mediumBar"
+                            class="risk-fill medium-fill"
+                        ></div>
+                    </div>
+                    <strong id="mediumRisk">
+                        0
+                    </strong>
+                </div>
+                <div class="risk-row">
+                    <div class="risk-label">
+                        <span class="risk-dot low"></span>
+                        Low
+                    </div>
+                    <div class="risk-track">
+                        <div
+                            id="lowBar"
+                            class="risk-fill low-fill"
+                        ></div>
+                    </div>
+                    <strong id="lowRisk">
+                        0
+                    </strong>
+                </div>
+            </div>
+        </div>
+        <!-- INVESTIGATION QUEUE -->
+        <div class="investigation-layout">
+            <div class="queue-panel">
+                <div class="panel-heading">
+                    <div>
+                        <span class="chart-kicker">
+                            STEP 03
+                        </span>
+                        <h4>
+                            Investigation Queue
+                        </h4>
+                    </div>
+                    <span id="queueCount">
+                        0 failures
+                    </span>
+                </div>
+                <div
+                    class="engine-list"
+                    id="engineList"
+                ></div>
+            </div>
+            <!-- DETAIL -->
+            <div
+                class="detail-panel"
+                id="detailPanel"
+            >
+                <div class="empty-detail">
+                    <div class="empty-icon">
+                        ◇
+                    </div>
+                    <h4>
+                        Select a failed engine
+                    </h4>
+                    <p>
+                        Click an engine from the investigation
+                        queue to view its complete failure profile.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<footer>
+    <div>
+        <strong>DEVIORA</strong>
+        <span>
+            Explainable ML for Engine Failure Investigation
+        </span>
+    </div>
+    <div>
+        Predict → Explain → Recommend
+    </div>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>
